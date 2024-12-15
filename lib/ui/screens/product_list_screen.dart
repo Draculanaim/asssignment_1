@@ -85,11 +85,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           Navigator.pushNamed(context, AddNewProductScreen.name);
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, size: 40.0),
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        elevation: 6.0, // Add some shadow for depth
       ),
+
     );
   }
   Future<void> _getProductList() async {
@@ -146,7 +153,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     image: NetworkImage('${product.img}'),
                     errorBuilder: (context, error, stackTrace) {
                       return Image.network(
-                          'https://static.thenounproject.com/png/1211233-200.png');
+                          'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png');
                     },
                   ),
                   title: Text(product.productName ?? ''),
