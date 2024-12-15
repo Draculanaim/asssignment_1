@@ -27,15 +27,38 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey,
-        title: Text('Product List'),
-        bottomOpacity: 6,
+        title: Text(
+          'Product List',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
+        ),
+        backgroundColor: Colors.blueGrey[50], // Subtle background color
+        elevation: 4.0, // Slight shadow effect
+        centerTitle: true, // Center the title
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
-          IconButton(onPressed: (){
-            _getProductList();
-          }, icon: Icon(Icons.refresh),),
+          IconButton(
+            icon: Icon(Icons.refresh, color: Colors.black),
+            onPressed: () {
+              _getProductList();
+            },
+          ),
         ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16.0),
+          ),
+        ),
       ),
+
       body: RefreshIndicator(
         onRefresh: ()async{
           _getProductList();
@@ -98,13 +121,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
     setState(() {});
   }
 
-  // TODO Show Delete Item Dialog
+  //  Delete Item Dialog
   void _deleteItemDialog(Product product, int index) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Are you sure? Will you delete this product?'),
+          title: const Text('Do you want to delete this product?'),
           backgroundColor: Colors.white,
           content: Container(
             decoration: BoxDecoration(
@@ -157,7 +180,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.blueAccent,
                 ),
                 child: const Text(
                   'YES',

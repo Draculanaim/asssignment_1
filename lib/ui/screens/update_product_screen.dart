@@ -41,9 +41,30 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Product'),
-        backgroundColor: Colors.white70,
+        title: Text(
+          'Update Product',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
+        ),
+        backgroundColor: Colors.blueGrey[50], // Subtle background color
+        elevation: 4.0, // Slight shadow effect
+        centerTitle: true, // Center the title
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16.0),
+          ),
+        ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -62,65 +83,110 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: _nameTEController,
             decoration: InputDecoration(
-                hintText: 'Name', labelText: 'Product Name'),
+              hintText: 'Name',
+              labelText: 'Product Name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product Name';
               }
             },
           ),
+          const SizedBox(
+            height: 16,
+          ),
           TextFormField(
             controller: _priceTEController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
-            decoration:
-                InputDecoration(hintText: 'Price', labelText: 'Product Price'),
+            decoration: InputDecoration(
+              hintText: 'Price',
+              labelText: 'Product Price',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product Price';
               }
             },
           ),
+          const SizedBox(
+            height: 16,
+          ),
           TextFormField(
             controller: _totalPriceTEController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-                hintText: 'Total Price', labelText: 'Product Total Price'),
+              hintText: 'Total Price',
+              labelText: 'Product Total Price',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product total Price';
               }
             },
           ),
+          const SizedBox(
+            height: 16,
+          ),
           TextFormField(
             controller: _quantityTEController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-                hintText: 'Quantity', labelText: 'Product Quantity'),
+              hintText: 'Quantity',
+              labelText: 'Product Quantity',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product Quantity';
               }
             },
           ),
+          const SizedBox(
+            height: 16,
+          ),
           TextFormField(
             controller: _codeTEController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration:
-                InputDecoration(hintText: 'Code', labelText: 'Product Code'),
+            decoration: InputDecoration(
+              hintText: 'Code',
+              labelText: 'Product Code',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product Code';
               }
             },
           ),
+          const SizedBox(
+            height: 16,
+          ),
           TextFormField(
             controller: _imageTEController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
-                hintText: 'Image url', labelText: 'Product Image'),
+              hintText: 'Image url',
+              labelText: 'Product Image',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return 'Enter Product Image url';
@@ -141,6 +207,18 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                     _updateProduct();
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 child: const Text('Update Product')),
           )
         ],
@@ -161,8 +239,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       "TotalPrice": _totalPriceTEController.text.trim(),
       "UnitPrice": _priceTEController.text.trim(),
     };
-    Response response = await post(
-        uri,
+    Response response = await post(uri,
         headers: {'content-type': 'application/json'},
         body: jsonEncode(requestBody));
     print(response.statusCode);
