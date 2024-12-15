@@ -30,21 +30,33 @@ class _ProductListScreenState extends State<ProductListScreen> {
         backgroundColor: Colors.grey,
         title: Text('Product List'),
         bottomOpacity: 6,
+        actions: [
+          IconButton(onPressed: (){
+            _getProductList();
+          }, icon: Icon(Icons.refresh),),
+        ],
       ),
-      body: Visibility(
-        visible: _getProductListInProgress == false,
-        replacement: Center(
-          child: CircularProgressIndicator(
-
-          ) ,
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          _getProductList();
+        },
+        child: Visibility(
+          visible: _getProductListInProgress == false,
+          replacement: Center(
+            child: CircularProgressIndicator(
+        
+            ) ,
+          ),
+          child: ListView.builder(
+            itemCount: productList.length,
+              itemBuilder: (context, index){
+            return ProductItem(
+              product: productList[index], onDeleteTab: () {
+                _deleteItemDialog(productList[index], index);
+            setState(() {}); },
+            );
+          },),
         ),
-        child: ListView.builder(
-          itemCount: productList.length,
-            itemBuilder: (context, index){
-          return ProductItem(
-            product: productList[index],
-          );
-        },),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
@@ -55,6 +67,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
   Future<void> _getProductList() async {
+    productList.clear();
     _getProductListInProgress =true;
     setState(() {});
 
@@ -84,5 +97,99 @@ class _ProductListScreenState extends State<ProductListScreen> {
     _getProductListInProgress =false;
     setState(() {});
   }
+
+  // TODO Show Delete Item Dialog
+  void _deleteItemDialog(Product product, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Are you sure? Will you delete this product?'),
+          backgroundColor: Colors.white,
+          content: Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                border: Border.all(color: Colors.grey)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Image(
+                    height: 100,
+                    width: 70,
+                    image: NetworkImage('${product.img}'),
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.network(
+                          'https://static.thenounproject.com/png/1211233-200.png');
+                    },
+                  ),
+                  title: Text(product.productName ?? ''),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Product Code: ${product.productCode ?? ''}'),
+                      Text('Quantity:  ${product.quantity ?? ''}'),
+                      Text('Price:  ${product.unitPrice ?? ''}'),
+                      Text('Total Price:  ${product.totalPrice ?? ''}'),
+                    ],
+                  ),
+                  tileColor: Colors.white,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: Colors.grey)),
+              child: const Text(
+                'NO',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  _deletedProduct('${product.id}', index);
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                child: const Text(
+                  'YES',
+                  style: TextStyle(color: Colors.white),
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Delete Product API Call
+  Future<void> _deletedProduct(String ID, int index) async {
+    Uri uri = Uri.parse('https://crud.teamrabbil.com/api/v1/DeleteProduct/$ID');
+    Response response = await get(uri);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Delete confirm'),
+        ),
+      );
+
+      productList.removeAt(index);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Deleting process "False" ID:$ID'),
+        ),
+      );
+    }
+    setState(() {});
+  }
 }
+
 

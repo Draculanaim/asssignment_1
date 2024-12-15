@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import '../../models/product.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({super.key, required this.product});
+  ProductItem({super.key, required this.product,required this.onDeleteTab});
 
   final Product product;
+  VoidCallback? onDeleteTab;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // leading: Image.network(product.img ?? ''),
+      leading: Image.network(product.img ?? '',width: 50,),
       title: Text(product.productName ?? ''),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,9 +26,9 @@ class ProductItem extends StatelessWidget {
       ),
       trailing: Wrap(
         children: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+          IconButton(onPressed: onDeleteTab, icon: Icon(Icons.delete)),
           IconButton(onPressed: (){
-            Navigator.pushNamed(context, UpdateProductScreen.name);
+            Navigator.pushNamed(context, UpdateProductScreen.name,arguments:product,);
           }, icon: Icon(Icons.edit),),
         ],
       ),
