@@ -45,11 +45,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.refresh, color: Colors.black),
-            onPressed: () {
-              _getProductList();
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+              icon: Icon(Icons.refresh, color: Colors.black),
+              onPressed: () {
+                _getProductList();
+              },
+            ),
           ),
         ],
         shape: RoundedRectangleBorder(
